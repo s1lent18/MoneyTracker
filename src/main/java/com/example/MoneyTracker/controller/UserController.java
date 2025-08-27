@@ -1,6 +1,7 @@
 package com.example.MoneyTracker.controller;
 
 import com.example.MoneyTracker.JWT.JwtUtil;
+import com.example.MoneyTracker.service.CommuteService;
 import com.example.MoneyTracker.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,10 +10,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,6 +21,9 @@ public class UserController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    CommuteService commuteService;
 
     @Autowired
     AuthenticationManager authenticationManager;
@@ -70,6 +71,23 @@ public class UserController {
             Map<String, UserService.AddUserResponse> response = new HashMap<>();
 
             return ResponseEntity.badRequest().body(response);
+        }
+    }
+
+    @PostMapping("/{userId}/addCommute")
+    public ResponseEntity<?> addCommute(
+            @RequestBody CommuteService.AddCommuteRequest request,
+            @PathVariable Integer userId) {
+        try {
+            Map<String, CommuteService.AddCommuteResponse> response = new HashMap<>();
+
+            CommuteService.AddCommuteResponse r = commuteService.addCommuteRoute(userId, request);
+
+            response.put("commute", r);
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 }

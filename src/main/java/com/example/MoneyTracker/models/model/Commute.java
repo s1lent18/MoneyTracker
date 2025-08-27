@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.apache.catalina.User;
 
 @Getter @Setter @NoArgsConstructor
 @Entity
@@ -24,8 +25,9 @@ public class Commute {
     @JsonBackReference
     private Users user;
 
-    public Commute(String route, Integer price) {
+    public Commute(String route, Integer price, Users user) {
         this.route = route;
         this.price = price;
+        this.user = user;
     }
 }
