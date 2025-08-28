@@ -90,4 +90,21 @@ public class UserController {
             throw new RuntimeException(e);
         }
     }
+
+    @DeleteMapping("/{userId}/deleteCommute")
+    public ResponseEntity<?> addCommute(
+            @RequestParam("id") Integer id,
+            @PathVariable Integer userId) {
+        try {
+            Map<String, String> response = new HashMap<>();
+
+            String r = commuteService.deleteCommuteRoute(userId, id);
+
+            response.put("msg", r);
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

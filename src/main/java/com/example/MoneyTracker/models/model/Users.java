@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Setter @Getter @NoArgsConstructor
 @Entity
 @Table(name = "users")
@@ -27,11 +29,11 @@ public class Users {
 
     @OneToMany(mappedBy = "commute", cascade = CascadeType.ALL)
     @JsonManagedReference
-    private Commute commute;
+    private List<Commute> commutes;
 
     @OneToMany(mappedBy = "items", cascade = CascadeType.ALL)
     @JsonManagedReference
-    private Items item;
+    private List<Items> items;
 
     public Users(String name, String email, String password, Integer budget, Integer total) {
         this.name = name;

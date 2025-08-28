@@ -11,6 +11,8 @@ import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 @Service
 public class CommuteService {
 
@@ -46,5 +48,18 @@ public class CommuteService {
                 savedRoute.getRoute(),
                 savedRoute.getPrice()
         );
+    }
+
+    public String deleteCommuteRoute(Integer userId, Integer id) {
+        Users user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User Not Found"));
+
+        for (Commute route : user.getCommutes()) {
+            if (Objects.equals(route.getId(), id)) {
+                commuteRepository.deleteById(id);
+                return "Successfully Deleted";
+            }
+        }
+
+        return "Id Not Found";
     }
 }
