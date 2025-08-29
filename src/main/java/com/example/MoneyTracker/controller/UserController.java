@@ -2,6 +2,7 @@ package com.example.MoneyTracker.controller;
 
 import com.example.MoneyTracker.JWT.JwtUtil;
 import com.example.MoneyTracker.service.CommuteService;
+import com.example.MoneyTracker.service.ItemsService;
 import com.example.MoneyTracker.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,9 @@ public class UserController {
 
     @Autowired
     CommuteService commuteService;
+
+    @Autowired
+    ItemsService itemsService;
 
     @Autowired
     AuthenticationManager authenticationManager;
@@ -74,6 +78,24 @@ public class UserController {
         }
     }
 
+    @PostMapping("/{userId}/addItem")
+    public ResponseEntity<?> addItem(
+            @RequestBody ItemsService.AddItemsRequest request,
+            @PathVariable Integer userId
+    ) {
+        try {
+            Map<String, ItemsService.AddItemsResponse> response = new HashMap<>();
+
+            ItemsService.AddItemsResponse r = itemsService.addItem(userId, request);
+
+            response.put("commute", r);
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @PostMapping("/{userId}/addCommute")
     public ResponseEntity<?> addCommute(
             @RequestBody CommuteService.AddCommuteRequest request,
@@ -92,13 +114,31 @@ public class UserController {
     }
 
     @DeleteMapping("/{userId}/deleteCommute")
-    public ResponseEntity<?> addCommute(
+    public ResponseEntity<?> deleteCommute(
             @RequestParam("id") Integer id,
             @PathVariable Integer userId) {
         try {
             Map<String, String> response = new HashMap<>();
 
             String r = commuteService.deleteCommuteRoute(userId, id);
+
+            response.put("msg", r);
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @DeleteMapping("/{userId}/deleteItem")
+    public ResponseEntity<?> deleteItem(
+            @RequestParam("id") Integer id,
+            @PathVariable Integer userId
+    ) {
+        try {
+            Map<String, String> response = new HashMap<>();
+
+            String r = itemsService.deleteItem(userId, id);
 
             response.put("msg", r);
 

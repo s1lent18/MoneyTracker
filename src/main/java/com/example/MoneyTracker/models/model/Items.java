@@ -26,9 +26,10 @@ public class Items {
     @ManyToOne
     private Users user;
 
-    public Items(String name, Integer price, Integer quantity) {
+    public Items(String name, Integer price, Integer quantity, Users user) {
         this.name = name;
         this.price = price;
         this.quantity = quantity;
+        this.user = user;
     }
 }
