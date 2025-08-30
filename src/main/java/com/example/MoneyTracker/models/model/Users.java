@@ -27,11 +27,11 @@ public class Users {
 
     private Integer total;
 
-    @OneToMany(mappedBy = "commute", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<Commute> commutes;
 
-    @OneToMany(mappedBy = "items", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<Items> items;
 

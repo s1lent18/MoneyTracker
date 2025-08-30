@@ -35,7 +35,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             return new org.springframework.security.core.userdetails.User(
                     users.getEmail(),
                     users.getPassword(),
-                    List.of(new SimpleGrantedAuthority("USERS"))
+                    List.of(new SimpleGrantedAuthority("USER"))
             );
         }
         throw new IllegalArgumentException("Unknown user type");

@@ -47,6 +47,11 @@ public class ItemsService {
 
         Items savedItem = itemsRepository.save(item);
 
+        user.setTotal(user.getTotal() + request.price);
+        user.setBudget(user.getBudget() - request.price);
+
+        userRepository.save(user);
+
         return new AddItemsResponse(
                 savedItem.getId(),
                 savedItem.getName(),

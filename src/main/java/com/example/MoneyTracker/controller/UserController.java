@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
 
-@RequestMapping(name = "/user")
+@RequestMapping(value = "/user")
 @RestController
 public class UserController {
 
@@ -71,6 +71,8 @@ public class UserController {
             return ResponseEntity.ok(response);
 
         } catch (Exception e) {
+
+            e.printStackTrace();
 
             Map<String, UserService.AddUserResponse> response = new HashMap<>();
 

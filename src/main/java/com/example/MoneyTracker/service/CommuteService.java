@@ -43,6 +43,11 @@ public class CommuteService {
 
         Commute savedRoute = commuteRepository.save(route);
 
+        user.setTotal(user.getTotal() + request.price);
+        user.setBudget(user.getBudget() - request.price);
+
+        userRepository.save(user);
+
         return new AddCommuteResponse(
                 savedRoute.getId(),
                 savedRoute.getRoute(),

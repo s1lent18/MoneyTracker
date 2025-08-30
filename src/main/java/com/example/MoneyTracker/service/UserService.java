@@ -53,7 +53,9 @@ public class UserService {
     }
 
     public AddUserResponse addUser(AddUserRequest request) {
-        userRepository.findByEmail(request.email).orElseThrow(() -> new RuntimeException("User Already Exist"));
+        if (userRepository.findByEmail(request.email).isPresent()) {
+            throw new RuntimeException("User Already Exist");
+        }
 
         Users user = new Users(
                 request.name,
