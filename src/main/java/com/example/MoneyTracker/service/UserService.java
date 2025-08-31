@@ -28,6 +28,12 @@ public class UserService {
         public Integer total;
     }
 
+    @Setter @Getter @NoArgsConstructor @AllArgsConstructor
+    public static class CredentialCheckRequest {
+        public String email;
+        public String password;
+    }
+
     @Setter @Getter @NoArgsConstructor
     public static class AddUserResponse {
         public String email;

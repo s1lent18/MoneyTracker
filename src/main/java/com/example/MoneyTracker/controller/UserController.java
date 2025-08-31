@@ -1,6 +1,7 @@
 package com.example.MoneyTracker.controller;
 
 import com.example.MoneyTracker.JWT.JwtUtil;
+import com.example.MoneyTracker.models.repository.UserRepository;
 import com.example.MoneyTracker.service.CommuteService;
 import com.example.MoneyTracker.service.ItemsService;
 import com.example.MoneyTracker.service.UserService;
@@ -14,11 +15,15 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RequestMapping(value = "/user")
 @RestController
 public class UserController {
+
+    @Autowired
+    UserRepository userRepository;
 
     @Autowired
     UserService userService;
@@ -37,6 +42,22 @@ public class UserController {
 
     @Autowired
     UserDetailsService userDetailsService;
+
+    @PostMapping("/validate")
+    public ResponseEntity<?> validateCredentials(@RequestBody UserService.CredentialCheckRequest request) {
+        if (request.email == null || request.password == null) {
+            return ResponseEntity.badRequest().body(Map.of("message", "Email and password required"));
+        }
+
+        if (userRepository.findByEmail(request.email).isPresent()) {
+            return ResponseEntity.badRequest().body(Map.of("message", "Email already registered"));
+        }
+        if (request.password.length() < 8) {
+            return ResponseEntity.badRequest().body(Map.of("message", "Password too short"));
+        }
+
+        return ResponseEntity.ok(Map.of("message", "true"));
+    }
 
     @PostMapping("/signUp")
     public ResponseEntity<?> addUser(@RequestBody UserService.AddUserRequest request) {
@@ -108,6 +129,23 @@ public class UserController {
             CommuteService.AddCommuteResponse r = commuteService.addCommuteRoute(userId, request);
 
             response.put("commute", r);
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @GetMapping("/{userId}/getCommutes")
+    public ResponseEntity<?> getCommutes(
+            @PathVariable Integer userId
+    ) {
+        try {
+            Map<String, List<CommuteService.AddCommuteResponse>> response = new HashMap<>();
+
+            List<CommuteService.AddCommuteResponse> r = commuteService.getCommutes(userId);
+
+            response.put("commutes", r);
 
             return ResponseEntity.ok(response);
         } catch (Exception e) {

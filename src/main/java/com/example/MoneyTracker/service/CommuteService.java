@@ -11,6 +11,8 @@ import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -33,6 +35,20 @@ public class CommuteService {
         public Integer id;
         public String route;
         public Integer price;
+    }
+
+    public List<AddCommuteResponse> getCommutes(Integer userId) {
+
+        Users user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User Not Found"));
+
+        List<AddCommuteResponse> response = new ArrayList<>();
+
+        for (Commute route : user.getCommutes()) {
+            AddCommuteResponse r = new AddCommuteResponse(route.getId(), route.getRoute(), route.getPrice());
+            response.add(r);
+        }
+
+        return response;
     }
 
     public AddCommuteResponse addCommuteRoute(Integer userId, AddCommuteRequest request) {
