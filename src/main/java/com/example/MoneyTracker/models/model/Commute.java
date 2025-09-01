@@ -5,7 +5,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.apache.catalina.User;
+
+import java.util.Date;
 
 @Getter @Setter @NoArgsConstructor
 @Entity
@@ -19,15 +20,18 @@ public class Commute {
     private String route;
 
     private Integer price;
+    
+    private Date date;
 
     @ManyToOne
     @JoinColumn(name = "userid", nullable = false)
     @JsonBackReference
     private Users user;
 
-    public Commute(String route, Integer price, Users user) {
+    public Commute(String route, Integer price, Date date, Users user) {
         this.route = route;
         this.price = price;
         this.user = user;
+        this.date = date;
     }
 }

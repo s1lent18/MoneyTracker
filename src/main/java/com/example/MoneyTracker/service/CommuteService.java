@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -28,6 +29,7 @@ public class CommuteService {
     public static class AddCommuteRequest {
         public String route;
         public Integer price;
+        public Date date;
     }
 
     @Setter @Getter @NoArgsConstructor @AllArgsConstructor
@@ -35,6 +37,7 @@ public class CommuteService {
         public Integer id;
         public String route;
         public Integer price;
+        public Date date;
     }
 
     public List<AddCommuteResponse> getCommutes(Integer userId) {
@@ -44,7 +47,7 @@ public class CommuteService {
         List<AddCommuteResponse> response = new ArrayList<>();
 
         for (Commute route : user.getCommutes()) {
-            AddCommuteResponse r = new AddCommuteResponse(route.getId(), route.getRoute(), route.getPrice());
+            AddCommuteResponse r = new AddCommuteResponse(route.getId(), route.getRoute(), route.getPrice(), route.getDate());
             response.add(r);
         }
 
@@ -55,7 +58,7 @@ public class CommuteService {
 
         Users user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User Not Found"));
 
-        Commute route = new Commute(request.route, request.price, user);
+        Commute route = new Commute(request.route, request.price, request.date, user);
 
         Commute savedRoute = commuteRepository.save(route);
 
@@ -67,7 +70,8 @@ public class CommuteService {
         return new AddCommuteResponse(
                 savedRoute.getId(),
                 savedRoute.getRoute(),
-                savedRoute.getPrice()
+                savedRoute.getPrice(),
+                savedRoute.getDate()
         );
     }
 
